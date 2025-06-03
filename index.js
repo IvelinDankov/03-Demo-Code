@@ -62,7 +62,16 @@ app.get("/", (req, res) => {
 app.get("/home", (req, res) => {
   const token = req.cookies["auth"];
 
-  if (!token) return res.send("User does not exist!");
+  if (!token)
+    return res.send(`${header}
+
+    
+     <h1>Welcome to Home Page</h1>
+     <h4> Log in now  </h4>
+        <a href="/login">Login</a>
+ 
+
+    ${footer} `);
 
   const decodedToken = jwt.verify(token, SECRET);
 
@@ -151,27 +160,7 @@ app.post("/login", (req, res) => {
   try {
     const token = jwt.sign(payload, SECRET, { expiresIn: "3h" });
     res.cookie("auth", token);
-    res.send(`${header}
-
-    
-     <h1>Welcome to Login Page</h1>
-
-     <form method="post">
-        <h3>Login form</h3>
-        <p class="form-group">
-          <label for="username">username</label>
-          <input type="text" name="username" id="username" />
-        </p>
-        <p class="form-group">
-          <label for="password">password</label>
-          <input type="password" name="password" id="password" />
-        </p>
-        <p class="cta-btns">
-            <button type="submit">Login</button>
-        </p>
-      </form>
-
-    ${footer} `);
+    res.redirect("/home");
   } catch (err) {
     res.clearCookie("auth");
     res.status(403).send("Token is not valid");
@@ -179,12 +168,30 @@ app.post("/login", (req, res) => {
 });
 
 app.get("/admin", (req, res) => {
+  const token = req.cookies["auth"];
+
+  if (!token) return res.send(`Token does not exist!`);
+
+  const decodedToken = jwt.verify(token, SECRET);
+
   res.send(`${header}
 
     
      <h1>Welcome to Admin Page</h1>
 
+     <h3> ${decodedToken.username}, Admin Page. </h3>
+
     ${footer} `);
+});
+app.get("/logout", (req, res) => {
+  const token = req.cookies["auth"];
+  if (!token) {
+    return;
+  } else {
+    res.clearCookie("auth");
+  }
+
+  res.redirect("/home");
 });
 
 app.listen(port, () => console.log(`Server is listening on port ${port}...`));

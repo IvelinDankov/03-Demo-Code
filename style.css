@@ -106,3 +106,7 @@ button {
   cursor: pointer;
   padding: 0.8rem;
 }
+
+h3 {
+  text-transform: capitalize;
+}
