@@ -1,0 +1,53 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+header {
+  height: 7rem;
+
+  width: 100%;
+  background-image: radial-gradient(
+    circle,
+    #342dd3,
+    rgb(33, 0, 52),
+    rgb(0, 88, 81)
+  );
+}
+
+header ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  height: 100%;
+  list-style: none;
+}
+
+header ul li a {
+  text-decoration: none;
+  padding: 0.6rem 1.8rem;
+  background-color: violet;
+  border-radius: 0.5rem;
+  font-weight: 800;
+  color: #333;
+}
+
+header ul li:last-child a {
+  background-color: rgb(255, 23, 23);
+  font-size: 2rem;
+  padding: 0.25rem 0.8rem;
+}
+
+body {
+  text-align: center;
+}
+
+h1 {
+  margin: 2rem 0;
+}
