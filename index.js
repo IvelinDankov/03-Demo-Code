@@ -186,7 +186,7 @@ app.get("/admin", (req, res) => {
 app.get("/logout", (req, res) => {
   const token = req.cookies["auth"];
   if (!token) {
-    return;
+    return res.redirect("/register");
   } else {
     res.clearCookie("auth");
   }

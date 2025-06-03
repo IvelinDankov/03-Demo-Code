@@ -3,3 +3,11 @@
 - set up css page
 - set all pages.
 - creating register and login form.
+- password hash and bcrypt to hash password
+- set rounds and like 10 
+- in post login page look at and post see if you have token
+- if successfully login make your token
+- get token with jwt `jsonwebtoken`.
+- if no token reveal a message jwt.
+- if have token attach token to cookie.
+- 
