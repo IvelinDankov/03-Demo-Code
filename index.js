@@ -1,13 +1,18 @@
 import express from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 
 const port = 5000;
 
 const app = express();
 
+let users = [];
+const SECRET = "mysecret";
+
 app.use(express.static("./"));
 app.use(express.urlencoded());
+app.use(cookieParser());
 
 const header = `
        <!DOCTYPE html>
@@ -55,11 +60,19 @@ app.get("/", (req, res) => {
     ${footer} `);
 });
 app.get("/home", (req, res) => {
+  const token = req.cookies["auth"];
+
+  if (!token) return res.send("User does not exist!");
+
+  const decodedToken = jwt.verify(token, SECRET);
+
   res.send(`${header}
 
     
      <h1>Welcome to Home Page</h1>
-     <p> Please Log in First </p>
+     <h4> Hi,   ${decodedToken.username}</h4>
+
+ 
 
     ${footer} `);
 });
@@ -86,6 +99,17 @@ app.get("/register", (req, res) => {
 
     ${footer} `);
 });
+app.post("/register", (req, res) => {
+  const { username, password } = req.body;
+
+  const salt = bcrypt.genSaltSync(10);
+
+  const hashedPass = bcrypt.hashSync(password, salt);
+
+  users.push({ username, password: hashedPass });
+
+  res.redirect("/login");
+});
 app.get("/login", (req, res) => {
   res.send(`${header}
 
@@ -109,6 +133,51 @@ app.get("/login", (req, res) => {
 
     ${footer} `);
 });
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+
+  const user = users.find((user) => user.username === username);
+  if (!user) return res.send("<p>There is no such username</p>");
+
+  const isValid = bcrypt.compareSync(password, user.password);
+
+  if (!isValid) return res.send(`User password is not Valid!`);
+
+  const payload = {
+    username,
+    role: "admin",
+  };
+
+  try {
+    const token = jwt.sign(payload, SECRET, { expiresIn: "3h" });
+    res.cookie("auth", token);
+    res.send(`${header}
+
+    
+     <h1>Welcome to Login Page</h1>
+
+     <form method="post">
+        <h3>Login form</h3>
+        <p class="form-group">
+          <label for="username">username</label>
+          <input type="text" name="username" id="username" />
+        </p>
+        <p class="form-group">
+          <label for="password">password</label>
+          <input type="password" name="password" id="password" />
+        </p>
+        <p class="cta-btns">
+            <button type="submit">Login</button>
+        </p>
+      </form>
+
+    ${footer} `);
+  } catch (err) {
+    res.clearCookie("auth");
+    res.status(403).send("Token is not valid");
+  }
+});
+
 app.get("/admin", (req, res) => {
   res.send(`${header}
 

@@ -1,2 +1,5 @@
 - init project and create index file.
-- 
+- install bcrypt jwt cookie-parser
+- set up css page
+- set all pages.
+- creating register and login form.
