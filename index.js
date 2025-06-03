@@ -25,7 +25,7 @@ const header = `
         <li><a href="/home">Home</a></li>
         <li><a href="/login">Login</a></li>
         <li><a href="/register">register</a></li>
-        <li><a href="/admit">Admit</a></li>
+        <li><a href="/admin">Admin</a></li>
         <li><a href="/logout">&times; </a></li>
       </ul>
     </header>
@@ -35,15 +35,31 @@ const header = `
 const footer = `
      
     </main>
+
+    <footer> &copy; all rigths reserved </footer>
   </body>
 </html>
 `;
 
+const form = `
+    
+`;
+
+app.get("/", (req, res) => {
+  res.send(`${header}
+
+    
+     <h1>Welcome to Home Page</h1>
+     <p> Please Log in First </p>
+
+    ${footer} `);
+});
 app.get("/home", (req, res) => {
   res.send(`${header}
 
     
      <h1>Welcome to Home Page</h1>
+     <p> Please Log in First </p>
 
     ${footer} `);
 });
@@ -53,6 +69,21 @@ app.get("/register", (req, res) => {
     
      <h1>Welcome to Register Page</h1>
 
+      <form method="post">
+        <h3>Register form</h3>
+        <p class="form-group">
+          <label for="username">username</label>
+          <input type="text" name="username" id="username" />
+        </p>
+        <p class="form-group">
+          <label for="password">password</label>
+          <input type="password" name="password" id="password" />
+        </p>
+        <p class="cta-btns">
+            <button type="submit">Sign up</button>
+        </p>
+      </form>
+
     ${footer} `);
 });
 app.get("/login", (req, res) => {
@@ -60,6 +91,29 @@ app.get("/login", (req, res) => {
 
     
      <h1>Welcome to Login Page</h1>
+
+     <form method="post">
+        <h3>Login form</h3>
+        <p class="form-group">
+          <label for="username">username</label>
+          <input type="text" name="username" id="username" />
+        </p>
+        <p class="form-group">
+          <label for="password">password</label>
+          <input type="password" name="password" id="password" />
+        </p>
+        <p class="cta-btns">
+            <button type="submit">Login</button>
+        </p>
+      </form>
+
+    ${footer} `);
+});
+app.get("/admin", (req, res) => {
+  res.send(`${header}
+
+    
+     <h1>Welcome to Admin Page</h1>
 
     ${footer} `);
 });
